@@ -29,3 +29,11 @@ public class AppMain extends Lifecycle {
     }
 
 }
+
+class Game extends Form implements Runnable{
+
+    @Override
+    public void run() {
+
+    }
+}

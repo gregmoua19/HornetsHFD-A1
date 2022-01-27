@@ -15,17 +15,8 @@ import com.codename1.ui.util.Resources;
 public class AppMain extends Lifecycle {
     @Override
     public void runApp() {
-        Form hi = new Form("Hi World", BoxLayout.y());
-        Button helloButton = new Button("Hello World");
-        hi.add(helloButton);
-        helloButton.addActionListener(e -> hello());
-        hi.getToolbar().addMaterialCommandToSideMenu("Hello Command",
-        FontImage.MATERIAL_CHECK, 4, e -> hello());
-        hi.show();
-    }
+        new Game();
 
-    private void hello() {
-        Dialog.show("Hello Codename One", "Welcome to Codename One", "OK", null);
     }
 
 }

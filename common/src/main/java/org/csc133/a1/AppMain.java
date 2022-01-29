@@ -5,6 +5,7 @@ import static com.codename1.ui.CN.*;
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.system.Lifecycle;
 import com.codename1.ui.*;
+import com.codename1.ui.geom.Point;
 import com.codename1.ui.layouts.*;
 import com.codename1.io.*;
 import com.codename1.ui.plaf.*;
@@ -87,12 +88,13 @@ class GameWorld {
         helicopter = new Helicopter();
         helipad = new Helipad();
         river = new River();
-        for(int i = 0; i < NUMBER_OF_FIRES;i++) {
-            fires.add(new Fire());
-        }
+     //   for(int i = 0; i < NUMBER_OF_FIRES;i++) {
+   //         fires.add(new Fire());
+ //       }
     }
 
     public void quit() {
+
         Display.getInstance().exitApplication();
     }
 
@@ -114,7 +116,9 @@ class GameWorld {
     }
 
     public void drinkWater(){
-
+        if (helicopter.collidesWithRiver(river) == true) {
+            helicopter.setWater(helicopter.getWater()+100);
+        }
     }
 
     public void fightFire(){
@@ -122,7 +126,10 @@ class GameWorld {
     }
 
     public void draw(Graphics g) {
+
         helicopter.draw(g);
+        river.draw(g);
+        helipad.draw(g);
     }
 
     public void tick() {
@@ -131,45 +138,107 @@ class GameWorld {
 
 class River {
 
-    public River(){
+    private Point location;
 
+    public River(){
+        init();
     }
 
+    private void init() {
+        location = new Point(0, Display.getInstance().getDisplayHeight() / 3);
+    }
     public void draw(Graphics g) {
+
         g.setColor(ColorUtil.BLUE);
+        g.drawRect(location.getX(), location.getY(),
+                Display.getInstance().getDisplayWidth(),
+                Display.getInstance().getDisplayHeight() / 10);
+    }
+
+    public Point getLocation(){
+        return location;
     }
 }
 
 class Helipad {
 
-    public Helipad(){
+    private Point location;
 
+    public Helipad(){
+        init();
     }
 
+    private void init(){
+
+        //set the location of the helipad equal
+        //to middle of screen at the bottom (9/10 of the way down)
+        location = new Point(Display.getInstance().getDisplayWidth() / 2,Display.getInstance().getDisplayHeight() -
+                Display.getInstance().getDisplayHeight() / 10);
+        }
     public void draw(Graphics g) {
+
         g.setColor(ColorUtil.GRAY);
+
+        //created variables to not repeat
+        //"Display.getInstance().get------" several times
+        int length = Display.getInstance().getDisplayHeight()/10;
+        int width = Display.getInstance().getDisplayWidth()/10;
+        int offset = Display.getInstance().getDisplayWidth()/20;
+        //Because shapes are drawn from the upperleftmost point
+        //I offset it by half of its width to make it look more center
+        g.drawRect(location.getX() - offset,location.getY(), width, length);
+
+        g.drawArc(location.getX()- offset,location.getY(),
+                    width, length, 0, 360);
     }
 }
 
 class Fire {
-    int size;
+    private Point location;
+    private int size;
 
     public Fire(){
+
         size = new Random().nextInt(100);
     }
 
     public void draw(Graphics g) {
+
         g.setColor(ColorUtil.MAGENTA);
     }
+
 }
 
 class Helicopter {
-    int fuel;
-    int water;
-    int speed;
+    private Point location;
+    private int fuel;
+    private int water;
+    private int speed;
+    private static int maxSpeed;
+    private static int maxWater;
 
     public Helicopter(){
+        init();
+    }
 
+    private void init(){
+        fuel = 25000;
+        maxSpeed = 10;
+        maxWater = 1000;
+        speed = 0;
+        water = 0;
+    }
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public int getWater(){
+        return water;
+    }
+
+    public void setWater(int water){
+        this.water += water;
     }
 
     public void draw(Graphics g) {
@@ -177,6 +246,10 @@ class Helicopter {
         g.fillArc(Display.getInstance().getDisplayWidth()/2,
                 Display.getInstance().getDisplayHeight()/2,
                 50,50,0,360);
+    }
+
+    public boolean collidesWithRiver(River river) {
+        return river.getLocation().getY() >= this.getLocation().getY() ;
     }
 
 

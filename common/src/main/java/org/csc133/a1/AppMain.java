@@ -88,9 +88,10 @@ class GameWorld {
         helicopter = new Helicopter();
         helipad = new Helipad();
         river = new River();
-     //   for(int i = 0; i < NUMBER_OF_FIRES;i++) {
-   //         fires.add(new Fire());
- //       }
+        fires = new ArrayList<>();
+        for(int i = 0; i < NUMBER_OF_FIRES;i++) {
+            fires.add(new Fire());
+        }
     }
 
     public void quit() {
@@ -108,21 +109,20 @@ class GameWorld {
     }
 
     public void upArrowPressed(){
-
+        helicopter.changeSpeed(true);
     }
 
     public void downArrowPressed(){
-
+        helicopter.changeSpeed(false);
     }
 
     public void drinkWater(){
         if (helicopter.collidesWithRiver(river) == true) {
-            helicopter.setWater(helicopter.getWater()+100);
+            helicopter.drinkWater();
         }
     }
 
     public void fightFire(){
-
     }
 
     public void draw(Graphics g) {
@@ -130,10 +130,15 @@ class GameWorld {
         helicopter.draw(g);
         river.draw(g);
         helipad.draw(g);
+        for (Fire fire : fires) {
+            fire.draw(g);
+        }
     }
 
     public void tick() {
     }
+
+
 }
 
 class River {
@@ -181,7 +186,7 @@ class Helipad {
 
         //created variables to not repeat
         //"Display.getInstance().get------" several times
-        int length = Display.getInstance().getDisplayHeight()/10;
+        int length = Display.getInstance().getDisplayWidth()/10;
         int width = Display.getInstance().getDisplayWidth()/10;
         int offset = Display.getInstance().getDisplayWidth()/20;
         //Because shapes are drawn from the upperleftmost point
@@ -205,6 +210,7 @@ class Fire {
     public void draw(Graphics g) {
 
         g.setColor(ColorUtil.MAGENTA);
+        g.fillArc(new Random().nextInt(500), new Random().nextInt(500), size, size, 0, 360);
     }
 
 }
@@ -216,6 +222,7 @@ class Helicopter {
     private int speed;
     private static int maxSpeed;
     private static int maxWater;
+    private int heading;
 
     public Helicopter(){
         init();
@@ -233,19 +240,37 @@ class Helicopter {
         return location;
     }
 
-    public int getWater(){
-        return water;
+    public void drinkWater(){
+        if (speed <= 2 && water < 1000) {
+            water += 100;
+        }
     }
 
-    public void setWater(int water){
-        this.water += water;
+    //rather than making one method for speedup and
+    //another for slowdown, I chose to make one that
+    //ued a boolean parameter to either increase or decrease
+    public void changeSpeed(boolean speedUp) {
+
+        //check speed first to make sure it's
+        //between 0-10 between allowing it to be changed
+        if(speedUp == false && speed > 0) {
+            speed -= 1;
+        } else if (speedUp == true && speed < 10) {
+            speed += 1;
+        }
     }
+
+
 
     public void draw(Graphics g) {
         g.setColor(ColorUtil.YELLOW);
         g.fillArc(Display.getInstance().getDisplayWidth()/2,
                 Display.getInstance().getDisplayHeight()/2,
                 50,50,0,360);
+    }
+
+    public void walk(){
+
     }
 
     public boolean collidesWithRiver(River river) {

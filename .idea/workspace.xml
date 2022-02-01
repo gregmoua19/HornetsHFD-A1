@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="Drew the river and helipad on graphics. Working on logic that allows for collision detection between helicopter and river, helicopter and water, and helicopter and helipad.">
+    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="-Changed helipad from rectangle into a square.&#10;-Fixed the fires and drew them onto the display.&#10;-Finished speed setting and water functions with helicopter.&#10;-Working on changing the helicopter heading.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a1/AppMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a1/AppMain.java" afterDir="false" />
     </list>
@@ -807,7 +807,14 @@
       <option name="project" value="LOCAL" />
       <updated>1643451737587</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="-Changed helipad from rectangle into a square.&#10;-Fixed the fires and drew them onto the display.&#10;-Finished speed setting and water functions with helicopter.&#10;-Working on changing the helicopter heading.">
+      <created>1643619088691</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1643619088691</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -826,6 +833,7 @@
     <MESSAGE value="Deleted boilerplate code. Ready to begin coding A1 project." />
     <MESSAGE value="Fleshed out templates of classes. Key listener and draw methods have been started. The game objects have been given their constructors and draw methods alongside respective variables. the Game and GameWorld methods are currently being populated with methods to measure the ticks and paint the display." />
     <MESSAGE value="Drew the river and helipad on graphics. Working on logic that allows for collision detection between helicopter and river, helicopter and water, and helicopter and helipad." />
-    <option name="LAST_COMMIT_MESSAGE" value="Drew the river and helipad on graphics. Working on logic that allows for collision detection between helicopter and river, helicopter and water, and helicopter and helipad." />
+    <MESSAGE value="-Changed helipad from rectangle into a square.&#10;-Fixed the fires and drew them onto the display.&#10;-Finished speed setting and water functions with helicopter.&#10;-Working on changing the helicopter heading." />
+    <option name="LAST_COMMIT_MESSAGE" value="-Changed helipad from rectangle into a square.&#10;-Fixed the fires and drew them onto the display.&#10;-Finished speed setting and water functions with helicopter.&#10;-Working on changing the helicopter heading." />
   </component>
 </project>

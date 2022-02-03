@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="-Changed helipad from rectangle into a square.&#10;-Fixed the fires and drew them onto the display.&#10;-Finished speed setting and water functions with helicopter.&#10;-Working on changing the helicopter heading.">
+    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="-Fires now grow with ticks and spawn in the right areas&#10;-Implemented more logic for endgame&#10;      -Landing helicopter and checking all fires&#10;-Improved readability by reducing all wide lines to &lt;80 chars&#10;-Drew helicopter line to indicate direction&#10;&#10;-Currently working on helicopter movement">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a1/AppMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a1/AppMain.java" afterDir="false" />
     </list>
@@ -814,7 +814,14 @@
       <option name="project" value="LOCAL" />
       <updated>1643619088691</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="-Fires now grow with ticks and spawn in the right areas&#10;-Implemented more logic for endgame&#10;      -Landing helicopter and checking all fires&#10;-Improved readability by reducing all wide lines to &lt;80 chars&#10;-Drew helicopter line to indicate direction&#10;&#10;-Currently working on helicopter movement">
+      <created>1643701082170</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1643701082170</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -834,6 +841,7 @@
     <MESSAGE value="Fleshed out templates of classes. Key listener and draw methods have been started. The game objects have been given their constructors and draw methods alongside respective variables. the Game and GameWorld methods are currently being populated with methods to measure the ticks and paint the display." />
     <MESSAGE value="Drew the river and helipad on graphics. Working on logic that allows for collision detection between helicopter and river, helicopter and water, and helicopter and helipad." />
     <MESSAGE value="-Changed helipad from rectangle into a square.&#10;-Fixed the fires and drew them onto the display.&#10;-Finished speed setting and water functions with helicopter.&#10;-Working on changing the helicopter heading." />
-    <option name="LAST_COMMIT_MESSAGE" value="-Changed helipad from rectangle into a square.&#10;-Fixed the fires and drew them onto the display.&#10;-Finished speed setting and water functions with helicopter.&#10;-Working on changing the helicopter heading." />
+    <MESSAGE value="-Fires now grow with ticks and spawn in the right areas&#10;-Implemented more logic for endgame&#10;      -Landing helicopter and checking all fires&#10;-Improved readability by reducing all wide lines to &lt;80 chars&#10;-Drew helicopter line to indicate direction&#10;&#10;-Currently working on helicopter movement" />
+    <option name="LAST_COMMIT_MESSAGE" value="-Fires now grow with ticks and spawn in the right areas&#10;-Implemented more logic for endgame&#10;      -Landing helicopter and checking all fires&#10;-Improved readability by reducing all wide lines to &lt;80 chars&#10;-Drew helicopter line to indicate direction&#10;&#10;-Currently working on helicopter movement" />
   </component>
 </project>

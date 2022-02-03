@@ -102,11 +102,11 @@ class GameWorld {
 
 
     public void leftArrowPressed() {
-
+        helicopter.steer(false);
     }
 
     public void rightArrowPressed(){
-
+        helicopter.steer(true);
     }
 
     public void upArrowPressed(){
@@ -158,6 +158,7 @@ class GameWorld {
         }
 
         //move forward
+        helicopter.walk();
     }
 
     public boolean landCopter(){
@@ -349,12 +350,6 @@ class Helicopter {
         return location;
     }
 
-    public void setLocation(Point location) {
-        this.location = location;
-    }
-
-    public void setFuel(int fuel) { this.fuel = fuel;}
-
     public int getFuel() { return fuel;}
 
     public int getSpeed() {return speed;}
@@ -396,9 +391,18 @@ class Helicopter {
 
     public void walk(){
         fuel = fuel - ((speed * speed) + 5);
-
+        location.setX(location.getX() + heading );
+        location.setY(location.getY() - speed * 2);
         //based on direction pointed it will determine where we steer
 
+    }
+
+    public void steer(boolean direction){
+        if (direction) {
+            heading += 15;
+        } else {
+            heading -= 15;
+        }
     }
 
     public boolean collidesWithRiver(River river) {

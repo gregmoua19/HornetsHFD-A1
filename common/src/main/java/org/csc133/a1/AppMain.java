@@ -1,3 +1,4 @@
+//Greg Moua 3960
 package org.csc133.a1;
 
 import static com.codename1.ui.CN.*;
@@ -118,16 +119,19 @@ class GameWorld {
     }
 
     public void drinkWater(){
-        if (helicopter.collidesWithRiver(river) == true) {
+        if (helicopter.collidesWithRiver(river)) {
             helicopter.drinkWater();
         }
     }
 
     public void fightFire(){
+        for (Fire fire: fires) {
+            helicopter.fight(fire);
+        }
     }
 
     public void draw(Graphics g) {
-
+        g.clearRect(0,0, Game.DISP_W, Game.DISP_H);
         helicopter.draw(g);
         river.draw(g);
         helipad.draw(g);
@@ -144,11 +148,13 @@ class GameWorld {
         if(allFiresOut(fires) && helicopter.getSpeed() == 0 && landCopter()){
             //victory condition
             //ask to play again or quit
+            Dialog.show("You win!", "Your Score: " + helicopter.getFuel() + "\nPlay again","Yes", "No");
 
         //if you run out of fuel you lose
         } else if (helicopter.getFuel() <= 0) {
             //defeat
             //ask to play again or quit
+            Dialog.show("Game over!", "Want to play again?", "Yes", "No");
         } else {
             //else grow the fires by random amount 1-10
             //and continue the game
@@ -159,6 +165,8 @@ class GameWorld {
 
         //move forward
         helicopter.walk();
+
+
     }
 
     public boolean landCopter(){
@@ -242,7 +250,7 @@ class Helipad {
         int length = Display.getInstance().getDisplayWidth()/10;
         int width = Display.getInstance().getDisplayWidth()/10;
         int offset = Display.getInstance().getDisplayWidth()/20;
-        //Because shapes are drawn from the upperleftmost point
+        //Because shapes are drawn from the upper   leftmost point
         //I offset it by half of its width to make it look more center
         g.drawRect(location.getX() - offset,location.getY(), width, length);
 
@@ -301,9 +309,14 @@ class Fire {
 
     public void draw(Graphics g) {
         g.setColor(ColorUtil.MAGENTA);
-        g.fillArc(location.getX(), location.getY(), size, size, 0, 360);
+        if(size > 0) {
+            g.fillArc(location.getX(), location.getY(), size, size, 0, 360);
+        }
     }
 
+    public Point getLocation() {
+        return location;
+    }
     public void grow(){
         size += new Random().nextInt(3);
     }
@@ -311,6 +324,8 @@ class Fire {
     public int getSize(){
         return size;
     }
+
+    public void setSize(int size) { this.size = size;}
 
 }
 
@@ -323,7 +338,7 @@ class Helicopter {
     private static int maxWater;
     private int heading;
     private Helipad helipad;
-
+    private double RadianHeading;
     public Helicopter(){
         init();
     }
@@ -356,6 +371,8 @@ class Helicopter {
 
     public void drinkWater(){
         if (speed <= 2 && water < 1000) {
+            System.out.println("You are crashing into the river");
+            System.out.println(water);
             water += 100;
         }
     }
@@ -374,8 +391,14 @@ class Helicopter {
         }
     }
 
-    public void fight(){
-
+    public void fight(Fire fire){
+        if (collidesWithFire(fire)) {
+            water -= fire.getSize();
+            fire.setSize(-water);
+            if (water < 0) {
+                water = 0;
+            }
+        }
     }
 
     public void draw(Graphics g) {
@@ -385,28 +408,62 @@ class Helicopter {
         g.fillArc(location.getX(), location.getY(),50,50,0,360);
         g.drawLine(location.getX()+ location.getX()/25,
                    location.getY()+location.getY()/50,
-                   location.getX()+ location.getX()/25,
-                   location.getY()- location.getY()/30);
+
+                //x1 y1 guarantees that the line starts
+                //in the center of the circle but the
+                //x2 y2 are dictated by the angle of the heading
+                location.getX(),
+            location.getY() - 60);
     }
 
     public void walk(){
         fuel = fuel - ((speed * speed) + 5);
-        location.setX(location.getX() + heading );
+        location.setX(location.getX());
         location.setY(location.getY() - speed * 2);
         //based on direction pointed it will determine where we steer
 
     }
 
     public void steer(boolean direction){
-        if (direction) {
-            heading += 15;
+        //turn right so +15
+        if(direction) {
+
+            //conditionals to change heading by 15 degrees
+            //once it hits 360 it will jump to 15
+            if(heading == 360 || heading == 0) {
+                heading = 15;
+            } else {
+                heading += 15;
+            }
+        //turn left so -15
         } else {
-            heading -= 15;
+
+            //conditionals to change heading by 15 degrees
+            //once it hits 0 it will jump to 345
+            if (heading == 0 || heading == 360) {
+                heading = 345;
+            } else {
+                heading -= 15;
+            }
         }
+
+        double RadianHeading = Math.toRadians(heading);
     }
 
     public boolean collidesWithRiver(River river) {
-        return river.getLocation().getY() >= this.getLocation().getY() ;
+        int YRiver = river.getLocation().getY();
+        int dispHeight = Display.getInstance().getDisplayHeight() / 10;
+        return (YRiver <= this.getLocation().getY()) &&
+                YRiver + dispHeight >= this.getLocation().getY();
+    }
+
+    public boolean collidesWithFire(Fire fire) {
+        int fireXLoc = fire.getLocation().getX();
+        int fireYLoc = fire.getLocation().getY();
+        return (fireYLoc <= location.getY())
+                && (fireYLoc + fire.getSize() >= location.getY())
+                && (fireXLoc <= location.getX())
+                && (fireXLoc + fire.getSize() >= location.getX());
     }
 
 

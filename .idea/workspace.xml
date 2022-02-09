@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="-Implemented primitive movement that adjusts self according to speed&#10;-Still not entirely working yet; need to find develop way for steering&#10;-Cleaned up some unused methods">
+    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="-Implemented drinking water from river logic&#10;-Implemented firefighting logic&#10;-Implemented basic Dialog boxes for winning and losing endgame&#10;-Implementing a steering method">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a1/AppMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a1/AppMain.java" afterDir="false" />
     </list>
@@ -828,7 +828,14 @@
       <option name="project" value="LOCAL" />
       <updated>1643874979344</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="-Implemented drinking water from river logic&#10;-Implemented firefighting logic&#10;-Implemented basic Dialog boxes for winning and losing endgame&#10;-Implementing a steering method">
+      <created>1643961382949</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1643961382949</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -850,6 +857,7 @@
     <MESSAGE value="-Changed helipad from rectangle into a square.&#10;-Fixed the fires and drew them onto the display.&#10;-Finished speed setting and water functions with helicopter.&#10;-Working on changing the helicopter heading." />
     <MESSAGE value="-Fires now grow with ticks and spawn in the right areas&#10;-Implemented more logic for endgame&#10;      -Landing helicopter and checking all fires&#10;-Improved readability by reducing all wide lines to &lt;80 chars&#10;-Drew helicopter line to indicate direction&#10;&#10;-Currently working on helicopter movement" />
     <MESSAGE value="-Implemented primitive movement that adjusts self according to speed&#10;-Still not entirely working yet; need to find develop way for steering&#10;-Cleaned up some unused methods" />
-    <option name="LAST_COMMIT_MESSAGE" value="-Implemented primitive movement that adjusts self according to speed&#10;-Still not entirely working yet; need to find develop way for steering&#10;-Cleaned up some unused methods" />
+    <MESSAGE value="-Implemented drinking water from river logic&#10;-Implemented firefighting logic&#10;-Implemented basic Dialog boxes for winning and losing endgame&#10;-Implementing a steering method" />
+    <option name="LAST_COMMIT_MESSAGE" value="-Implemented drinking water from river logic&#10;-Implemented firefighting logic&#10;-Implemented basic Dialog boxes for winning and losing endgame&#10;-Implementing a steering method" />
   </component>
 </project>

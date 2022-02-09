@@ -81,6 +81,7 @@ class GameWorld {
     private ArrayList<Fire> fires;
     private Helipad helipad;
     private River river;
+    private int increment;
 
     public GameWorld(){
         init();
@@ -91,9 +92,47 @@ class GameWorld {
         helipad = new Helipad();
         river = new River();
         fires = new ArrayList<>();
-        for(int i = 1; i <= NUMBER_OF_FIRES;i++) {
-            fires.add(new Fire(i));
-        }
+
+        for(int i = 0; i <= NUMBER_OF_FIRES;i++) {
+            fires.add(new Fire());
+
+            if(i == 0) {
+                fires.get(i).setLocation(
+                    new Point(
+                        new Random().nextInt(
+                            Game.DISP_W / 10) + Game.DISP_W / 10,
+                        new Random().nextInt(
+                            Game.DISP_H / 10) + Game.DISP_H /10));
+
+                fires.get(i).setSize(
+                    new Random().nextInt(
+                        Game.DISP_W / 6)+50);
+
+            } else if (i == 1) {
+                fires.get(i).setLocation(
+                    new Point(
+                        new Random().nextInt(
+                            Game.DISP_W / 10) + (6 * Game.DISP_W / 10),
+                        new Random().nextInt(
+                            Game.DISP_H / 10) + Game.DISP_H / 10));
+
+                fires.get(i).setSize(
+                    new Random().nextInt(
+                            Game.DISP_W / 5)+75);
+            } else {
+                fires.get(i).setLocation(
+                    new Point(
+                        new Random().nextInt(
+                            Game.DISP_W / 2) + Game.DISP_W / 10,
+                        new Random().nextInt(
+                            Game.DISP_H / 10) + (7 * Game.DISP_H / 10)));
+
+                fires.get(i).setSize(
+                    new Random().nextInt(
+                        Game.DISP_W / 4)+100);
+            }
+            }
+        increment = 0;
     }
 
     public void quit() {
@@ -159,7 +198,11 @@ class GameWorld {
             //else grow the fires by random amount 1-10
             //and continue the game
             for(Fire fire : fires) {
-                fire.grow();
+                increment++;
+                if(increment >= 5) {
+                    increment = 0;
+                    fire.grow();
+                }
             }
         }
 
@@ -172,8 +215,8 @@ class GameWorld {
     public boolean landCopter(){
         Point copter = helicopter.getLocation();
         Point pad = helipad.getLocation();
-        int pWidth = Display.getInstance().getDisplayWidth()/10;
-        int pLength = Display.getInstance().getDisplayWidth()/10;
+        int pWidth = Game.DISP_W/10;
+        int pLength = Game.DISP_W/10;
 
         //this conditional makes sure the location of the helicopter is
         //within the helipad
@@ -210,14 +253,14 @@ class River {
 
     private void init() {
         location = new Point(0,
-                             Display.getInstance().getDisplayHeight() / 3);
+                Game.DISP_H / 3);
     }
     public void draw(Graphics g) {
 
         g.setColor(ColorUtil.BLUE);
         g.drawRect(location.getX(), location.getY(),
-                Display.getInstance().getDisplayWidth(),
-                Display.getInstance().getDisplayHeight() / 10);
+                Game.DISP_W,
+                Game.DISP_H / 10);
     }
 
     public Point getLocation(){
@@ -237,9 +280,9 @@ class Helipad {
 
         //set the location of the helipad equal
         //to middle of screen at the bottom (9/10 of the way down)
-        location = new Point(Display.getInstance().getDisplayWidth() / 2,
-                             Display.getInstance().getDisplayHeight() -
-                                Display.getInstance().getDisplayHeight() / 10);
+        location = new Point(   Game.DISP_W / 2,
+                             Game.DISP_H -
+                                     Game.DISP_H / 10);
         }
     public void draw(Graphics g) {
 
@@ -247,9 +290,9 @@ class Helipad {
 
         //created variables to not repeat
         //"Display.getInstance().get------" several times
-        int length = Display.getInstance().getDisplayWidth()/10;
-        int width = Display.getInstance().getDisplayWidth()/10;
-        int offset = Display.getInstance().getDisplayWidth()/20;
+        int length = Game.DISP_W/10;
+        int width = Game.DISP_W/10;
+        int offset = Game.DISP_W/20;
         //Because shapes are drawn from the upper   leftmost point
         //I offset it by half of its width to make it look more center
         g.drawRect(location.getX() - offset,location.getY(), width, length);
@@ -268,45 +311,15 @@ class Helipad {
 class Fire {
     private Point location;
     private int size;
-    int number;
-    //using a number parameter to number each fire
-    //to know where draw it
-    public Fire(int number){
 
-        this.number = number;
-        int width = Display.getInstance().getDisplayWidth();
-        int height = Display.getInstance().getDisplayHeight();
-
-        //creating conditional statements to draw the fires in random
-        //but sectioned coordinates
-        //Fire 1 will always be in the upper left
-        //Fire 2 will always be in the upper right
-        //Fire 3 will always be in the lower bottom
-        if(number == 1) {
-            location = new Point(
-                    new Random().nextInt(width / 10) + width / 10,
-                    new Random().nextInt(height / 10) + height /10);
-            size = new Random().nextInt(width / 6)+50;
-
-        } else if (number == 2) {
-            location = new Point(
-                    new Random().nextInt(width / 10) + (6 * width / 10),
-                    new Random().nextInt(height / 10) + height / 10);
-            size = new Random().nextInt(width / 5)+75;
-
-        } else if (number == 3) {
-            location = new Point(
-                    new Random().nextInt(width / 2) + width / 10,
-                    new Random().nextInt(height / 10) + (7 * height / 10));
-            size = new Random().nextInt(width / 4)+100;
-
-        } else {
-            size = new Random().nextInt(500)+50;
-            location = new Point(new Random().nextInt(500),
-                                 new Random().nextInt(500));
-        }
+    public Fire(){
+        init();
     }
 
+    private void init(){
+        size = new Random().nextInt(500)+50;
+        location = new Point(new Random().nextInt(Game.DISP_W),new Random().nextInt(Game.DISP_H));
+    }
     public void draw(Graphics g) {
         g.setColor(ColorUtil.MAGENTA);
         if(size > 0) {
@@ -327,6 +340,10 @@ class Fire {
 
     public void setSize(int size) { this.size = size;}
 
+    public void setLocation(Point point){
+
+    }
+
 }
 
 class Helicopter {
@@ -344,8 +361,8 @@ class Helicopter {
     }
 
     private void init(){
-        int height = Display.getInstance().getDisplayHeight() / 50;
-        int width = Display.getInstance().getDisplayWidth() / 30;
+        int height = Game.DISP_H / 50;
+        int width = Game.DISP_W / 30;
         fuel = 25000;
         maxSpeed = 10;
         maxWater = 1000;
@@ -452,7 +469,7 @@ class Helicopter {
 
     public boolean collidesWithRiver(River river) {
         int YRiver = river.getLocation().getY();
-        int dispHeight = Display.getInstance().getDisplayHeight() / 10;
+        int dispHeight = Game.DISP_H / 10;
         return (YRiver <= this.getLocation().getY()) &&
                 YRiver + dispHeight >= this.getLocation().getY();
     }

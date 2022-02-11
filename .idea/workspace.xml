@@ -53,7 +53,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Code Alongs/BirdWorld/birdworldex1/pom.xml" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.14306152" />
@@ -751,20 +751,20 @@
     </configuration>
     <list>
       <item itemvalue="Maven.Android Build" />
-      <item itemvalue="Maven.iOS Debug Build" />
-      <item itemvalue="Maven.iOS Release Build" />
       <item itemvalue="Maven.Javascript Build" />
       <item itemvalue="Maven.Mac Desktop Build" />
       <item itemvalue="Maven.Windows Desktop Build" />
       <item itemvalue="Maven.Windows Device Build (UWP)" />
+      <item itemvalue="Maven.iOS Debug Build" />
+      <item itemvalue="Maven.iOS Release Build" />
       <item itemvalue="Maven.Cross-platform (JavaSE) Desktop App" />
-      <item itemvalue="Maven.Xcode iOS Project" />
       <item itemvalue="Maven.Gradle Android Project" />
-      <item itemvalue="Maven.Generate Native Interfaces" />
+      <item itemvalue="Maven.Xcode iOS Project" />
       <item itemvalue="Maven.Codename One Settings" />
+      <item itemvalue="Maven.Generate Native Interfaces" />
       <item itemvalue="Maven.Update Codename One" />
-      <item itemvalue="Maven.Run in Simulator" />
       <item itemvalue="Maven.Run as Desktop App" />
+      <item itemvalue="Maven.Run in Simulator" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

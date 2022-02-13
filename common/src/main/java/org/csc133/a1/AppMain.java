@@ -6,6 +6,8 @@ import static com.codename1.ui.CN.*;
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.system.Lifecycle;
 import com.codename1.ui.*;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.geom.Point;
 import com.codename1.ui.layouts.*;
 import com.codename1.io.*;
@@ -13,8 +15,8 @@ import com.codename1.ui.plaf.*;
 import com.codename1.ui.util.Resources;
 import com.codename1.ui.util.UITimer;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.border.Border;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
@@ -106,7 +108,7 @@ class GameWorld {
 
                 fires.get(i).setSize(
                     new Random().nextInt(
-                        Game.DISP_W / 6)+50);
+                        Game.DISP_W / 10)+50);
 
             } else if (i == 1) {
                 fires.get(i).setLocation(
@@ -118,7 +120,7 @@ class GameWorld {
 
                 fires.get(i).setSize(
                     new Random().nextInt(
-                            Game.DISP_W / 5)+75);
+                            Game.DISP_W / 10)+75);
             } else {
                 fires.get(i).setLocation(
                     new Point(
@@ -129,7 +131,7 @@ class GameWorld {
 
                 fires.get(i).setSize(
                     new Random().nextInt(
-                        Game.DISP_W / 4)+100);
+                        Game.DISP_W / 10)+100);
             }
             }
         increment = 0;
@@ -178,45 +180,74 @@ class GameWorld {
             fire.draw(g);
         }
         tick();
-        //Dialog.show("You win!", "Your Score: " + helicopter.getFuel() + "\nPlay again","Yes", "No");
         g.setFont(Font.createSystemFont(CN.FACE_MONOSPACE,
                 CN.STYLE_PLAIN,
                 CN.SIZE_MEDIUM));
-
-
     }
-
 
     public void tick() {
 
         //if all fires out and speed is 0
         //and resting on helipad you win
-        if(allFiresOut(fires) && helicopter.getSpeed() == 0 && landCopter()){
+        if (allFiresOut(fires) && helicopter.getSpeed() == 0 && landCopter()) {
             //victory condition
             //ask to play again or quit
 
+            //create new dialog and create new components
+            Dialog victory = new Dialog("You win!");
+            victory.setLayout(new BorderLayout());
+            Button repeat = new Button("Play again");
+            Button quit = new Button("Quit");
+            Dialog score = new Dialog("Your score: " + helicopter.getFuel());
 
-        //if you run out of fuel you lose
+            //add the components to the dialog
+            victory.add(BorderLayout.EAST, repeat);
+            victory.add(BorderLayout.WEST, quit);
+            victory.add(BorderLayout.NORTH, score);
+            victory.show();
+
+            //action listeners for the events to restart or quit game
+            repeat.addActionListener(actionEvent -> init());
+            quit.addActionListener(actionEvent -> quit());
+
+            //if you run out of fuel you lose
         } else if (helicopter.getFuel() <= 0) {
             //defeat
             //ask to play again or quit
-            Dialog.show("Game over!", "Want to play again?", "Yes", "No");
+
+            //repeat same process as win condition
+            //except this time no score printing
+            Dialog defeat = new Dialog("You Lose");
+            defeat.setLayout(new BorderLayout());
+            Button repeat = new Button("Play again");
+            Button quit = new Button("Quit");
+
+            defeat.add(BorderLayout.EAST, repeat);
+            defeat.add(BorderLayout.WEST, quit);
+            defeat.show();
         } else {
+
             //else grow the fires by random amount 1-10
-            //and continue the game
-            for(Fire fire : fires) {
+            //every 5 ticks and continue the game
+            for (Fire fire : fires) {
                 increment++;
-                if(increment >= 5) {
+                if (increment >= 5) {
                     increment = 0;
                     fire.grow();
                 }
             }
         }
 
-        //move forward
+        //move around
         helicopter.walk();
+    }
 
-
+    private void playAgain(boolean replay) {
+        if (replay) {
+            init();
+        } else {
+            quit();
+        }
     }
 
     public boolean landCopter(){
@@ -301,9 +332,9 @@ class Helipad {
 
         //Because shapes are drawn from the upper   leftmost point
         //I offset it by half of its width to make it look more center
-        g.drawRect(location.getX() - offset,location.getY(), width, length);
+        g.drawRect(location.getX() ,location.getY(), width, length);
 
-        g.drawArc(location.getX()- offset,location.getY(),
+        g.drawArc(location.getX(),location.getY(),
                     width, length, 0, 360);
     }
 
@@ -366,6 +397,8 @@ class Helicopter {
     private Helipad helipad;
     private Point lineLocation;
     private double radianHeading;
+    private int x;
+    private int y;
     public Helicopter(){
         init();
     }
@@ -381,18 +414,17 @@ class Helicopter {
         water = 0;
         helipad = new Helipad();
         heading = 0;
+        x = 0;
+        y = 0;
         location = new Point(
-                helipad.getLocation().getX() - width,
+                helipad.getLocation().getX() + width/2,
                 helipad.getLocation().getY() + height);
         lineLocation = new Point(
-                location.getX(),
-                location.getY()
+                location.getX() + 25,
+                location.getY() - 60
         );
     }
 
-    public void setHeading(int heading){
-        this.heading = heading;
-    }
     public Point getLocation() {
         return location;
     }
@@ -436,14 +468,16 @@ class Helicopter {
 
         //drawing a filled circle and line relative to its location
         g.fillArc(location.getX(), location.getY(),50,50,0,360);
-        g.drawLine(location.getX()+ location.getX()/50,
-                   location.getY()+location.getY()/50,
+        int x = location.getX() + 25;
+        int y = location.getY() - 200;
+        g.drawLine(location.getX() + 25,
+                   location.getY() + 25,
 
                 //x1 y1 guarantees that the line starts
                 //in the center of the circle but the
                 //x2 y2 are dictated by the angle of the heading
-                location.getX() + location.getX()/50,
-            location.getY() - 60);
+                lineLocation.getX(),
+                lineLocation.getY());
         g.drawString("Water: " + water,
                 location.getX(),
                 location.getY()  + 100);
@@ -455,8 +489,24 @@ class Helicopter {
 
     public void walk(){
         fuel = fuel - ((speed * speed) + 5);
-        location.setX(location.getX() + heading / 15);
-        location.setY(location.getY() - speed * 2);
+
+        //only move left and right if speed is greater than 0
+        //this will not change the direction that the line faces
+        if(speed > 0) {
+            if (heading <= 180) {
+                location.setX(location.getX() + speed * 2);
+            } else {
+                location.setX(location.getX() - speed * 2);
+            }
+        }
+
+        if (!(heading > 60 && heading < 270)) {
+            location.setY(location.getY() - speed * 2);
+        } else {
+            location.setY(location.getY() + speed * 2);
+        }
+        lineLocation.setX((int)(location.getX() + 60 * Math.cos(radianHeading)));
+        lineLocation.setY((int)(location.getY() + 60 * Math.sin(radianHeading)));
 
         //based on direction pointed it will determine where we steer
 
@@ -485,9 +535,11 @@ class Helicopter {
             }
         }
 
-        radianHeading = (int)Math.toRadians(heading);
-
-
+        radianHeading = Math.toRadians(heading);
+        System.out.println("Heading: " + heading);
+        System.out.println("Heading post radians: " + radianHeading);
+        System.out.println("Cos: " + Math.cos(radianHeading) * 15);
+        System.out.println("Sin: " + Math.sin(radianHeading) * 15);
     }
 
     public boolean collidesWithRiver(River river) {

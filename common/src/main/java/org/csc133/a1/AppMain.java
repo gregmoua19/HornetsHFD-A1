@@ -86,10 +86,6 @@ class GameWorld {
     private int increment;
 
     public GameWorld(){
-        init();
-    }
-
-    void init() {
         helicopter = new Helicopter();
         helipad = new Helipad();
         river = new River();
@@ -100,41 +96,45 @@ class GameWorld {
 
             if(i == 0) {
                 fires.get(i).setLocation(
-                    new Point(
-                        new Random().nextInt(
-                            Game.DISP_W / 10) + Game.DISP_W / 10,
-                        new Random().nextInt(
-                            Game.DISP_H / 10) + Game.DISP_H /10));
+                        new Point(
+                                new Random().nextInt(
+                                        Game.DISP_W / 10) + Game.DISP_W / 10,
+                                new Random().nextInt(
+                                        Game.DISP_H / 10) + Game.DISP_H /10));
 
                 fires.get(i).setSize(
-                    new Random().nextInt(
-                        Game.DISP_W / 10)+50);
+                        new Random().nextInt(
+                                Game.DISP_W / 10)+50);
 
             } else if (i == 1) {
                 fires.get(i).setLocation(
-                    new Point(
-                        new Random().nextInt(
-                            Game.DISP_W / 10) + (6 * Game.DISP_W / 10),
-                        new Random().nextInt(
-                            Game.DISP_H / 10) + Game.DISP_H / 10));
+                        new Point(
+                                new Random().nextInt(
+                                        Game.DISP_W / 10) + (6 * Game.DISP_W / 10),
+                                new Random().nextInt(
+                                        Game.DISP_H / 10) + Game.DISP_H / 10));
 
                 fires.get(i).setSize(
-                    new Random().nextInt(
-                            Game.DISP_W / 10)+75);
+                        new Random().nextInt(
+                                Game.DISP_W / 10)+75);
             } else {
                 fires.get(i).setLocation(
-                    new Point(
-                        new Random().nextInt(
-                            Game.DISP_W / 2) + Game.DISP_W / 10,
-                        new Random().nextInt(
-                            Game.DISP_H / 10) + (7 * Game.DISP_H / 10)));
+                        new Point(
+                                new Random().nextInt(
+                                        Game.DISP_W / 2) + Game.DISP_W / 10,
+                                new Random().nextInt(
+                                        Game.DISP_H / 10) + (7 * Game.DISP_H / 10)));
 
                 fires.get(i).setSize(
-                    new Random().nextInt(
-                        Game.DISP_W / 10)+100);
+                        new Random().nextInt(
+                                Game.DISP_W / 10)+100);
             }
-            }
+        }
         increment = 0;
+    }
+
+    void init() {
+        new Game().show();
     }
 
     public void quit() {
@@ -192,60 +192,55 @@ class GameWorld {
         if (allFiresOut(fires) && helicopter.getSpeed() == 0 && landCopter()) {
             //victory condition
             //ask to play again or quit
+            System.out.println("IF STATEMENT TRIGGERED");
 
-            //create new dialog and create new components
-            Dialog victory = new Dialog("You win!");
-            victory.setLayout(new BorderLayout());
-            Button repeat = new Button("Play again");
-            Button quit = new Button("Quit");
-            Dialog score = new Dialog("Your score: " + helicopter.getFuel());
-
-            //add the components to the dialog
-            victory.add(BorderLayout.EAST, repeat);
-            victory.add(BorderLayout.WEST, quit);
-            victory.add(BorderLayout.NORTH, score);
-            victory.show();
-
-            //action listeners for the events to restart or quit game
-            repeat.addActionListener(actionEvent -> init());
-            quit.addActionListener(actionEvent -> quit());
+            if(Dialog.show("You win", "Your score: " + helicopter.getFuel(), "yes", "no")){
+                System.out.println("NEW GAME NEW GAME NEW GAME");
+                init();
+            }else{
+                System.out.println("QUIT QUIT QUIT QUIT");
+                quit();
+            }
 
             //if you run out of fuel you lose
         } else if (helicopter.getFuel() <= 0) {
             //defeat
             //ask to play again or quit
 
-            //repeat same process as win condition
-            //except this time no score printing
-            Dialog defeat = new Dialog("You Lose");
-            defeat.setLayout(new BorderLayout());
-            Button repeat = new Button("Play again");
-            Button quit = new Button("Quit");
-
-            defeat.add(BorderLayout.EAST, repeat);
-            defeat.add(BorderLayout.WEST, quit);
-            defeat.show();
+            if(Dialog.show("game over", "you won or lost, play again?", "yes", "no")){
+                init();
+            }else{
+                quit();
+            }
         } else {
 
-            //else grow the fires by random amount 1-10
-            //every 5 ticks and continue the game
-            for (Fire fire : fires) {
-                increment++;
-                if (increment >= 5) {
-                    increment = 0;
-                    fire.grow();
+            //else grow the fires by random amount 1-5
+            //
+            for(int i = 0; i < NUMBER_OF_FIRES; i ++) {
+                int randomSize = 0;
+                randomSize = new Random().nextInt(3);
+                if (increment % 9 == 0) {
+                    fires.get(0).setSize(fires.get(0).getSize() + randomSize);
+                } else if (increment % 10 == 0) {
+                    fires.get(1).setSize(fires.get(1).getSize() + randomSize);
+                } else if (increment % 11 == 0){
+                    fires.get(2).setSize(fires.get(2).getSize() + randomSize);
                 }
             }
         }
 
         //move around
         helicopter.walk();
+        increment++;
     }
 
-    private void playAgain(boolean replay) {
+    private void replay(boolean replay) {
+        System.out.println("THIS METHOD IS BEING USED");
         if (replay) {
+            System.out.println("USER CHOSE TO PLAY AGAIN");
             init();
         } else {
+            System.out.println("USER CHOSE TO QUIT");
             quit();
         }
     }
@@ -278,13 +273,11 @@ class GameWorld {
         return true;
     }
 
-
 }
 
 class River {
 
     private Point location;
-
     public River(){
         init();
     }
@@ -325,15 +318,10 @@ class Helipad {
 
         g.setColor(ColorUtil.GRAY);
 
-
         int length = Game.DISP_W/20;
         int width = Game.DISP_W/20;
-        int offset = Game.DISP_W/20;
 
-        //Because shapes are drawn from the upper   leftmost point
-        //I offset it by half of its width to make it look more center
         g.drawRect(location.getX() ,location.getY(), width, length);
-
         g.drawArc(location.getX(),location.getY(),
                     width, length, 0, 360);
     }
@@ -355,7 +343,8 @@ class Fire {
 
     private void init(){
         size = new Random().nextInt(500)+50;
-        location = new Point(new Random().nextInt(Game.DISP_W),new Random().nextInt(Game.DISP_H));
+        location = new Point(new Random().nextInt(Game.DISP_W),
+                   new Random().nextInt(Game.DISP_H));
     }
     public void draw(Graphics g) {
         g.setColor(ColorUtil.MAGENTA);
@@ -391,14 +380,10 @@ class Helicopter {
     private int fuel;
     private int water;
     private int speed;
-    private static int maxSpeed;
-    private static int maxWater;
     private int heading;
     private Helipad helipad;
     private Point lineLocation;
     private double radianHeading;
-    private int x;
-    private int y;
     public Helicopter(){
         init();
     }
@@ -408,20 +393,17 @@ class Helicopter {
         int width = Game.DISP_W / 30;
         radianHeading = 0;
         fuel = 25000;
-        maxSpeed = 10;
-        maxWater = 1000;
         speed = 0;
         water = 0;
         helipad = new Helipad();
         heading = 0;
-        x = 0;
-        y = 0;
+
         location = new Point(
                 helipad.getLocation().getX() + width/2,
                 helipad.getLocation().getY() + height);
         lineLocation = new Point(
                 location.getX() + 25,
-                location.getY() - 60
+                location.getY() - 100
         );
     }
 
@@ -468,8 +450,6 @@ class Helicopter {
 
         //drawing a filled circle and line relative to its location
         g.fillArc(location.getX(), location.getY(),50,50,0,360);
-        int x = location.getX() + 25;
-        int y = location.getY() - 200;
         g.drawLine(location.getX() + 25,
                    location.getY() + 25,
 
@@ -488,27 +468,47 @@ class Helicopter {
     }
 
     public void walk(){
+
+        //take angle
+        //360/15 = 24
+        //that means there's only 24 places you can draw the line
         fuel = fuel - ((speed * speed) + 5);
 
-        //only move left and right if speed is greater than 0
-        //this will not change the direction that the line faces
-        if(speed > 0) {
-            if (heading <= 180) {
-                location.setX(location.getX() + speed * 2);
-            } else {
-                location.setX(location.getX() - speed * 2);
-            }
+        //4 if statements based off quadrants
+        //take into account that y is flipped
+        //1 to 89
+        //91 to 179
+        //181 to 269
+        //271 to 359 AKA 0-1
+        //specific conditionals for 0,90,180,270 implemented
+        int decX = (int)(location.getX() - speed*2*Math.cos(radianHeading));
+        int decY = (int)(location.getY() - speed*2*Math.sin(radianHeading));
+        if(heading > 0 && heading < 90) {
+            location.setX(decX);
+            location.setY(decY);
+        } else if (heading > 90 && heading < 180) {
+            location.setX(decX);
+            location.setY(decY);
+        } else if (heading > 180 && heading < 270) {
+            location.setX(decX);
+            location.setY(decY);
+        } else if (heading > 270){
+            location.setX(decX);
+            location.setY(decY);
+        } else if (heading == 0){
+            location.setY(decY);
+        } else if (heading == 90) {
+            location.setX(decX);
+        } else if (heading == 180) {
+            location.setY(decY);
+        } else if (heading == 270) {
+            location.setX(decX);
         }
 
-        if (!(heading > 60 && heading < 270)) {
-            location.setY(location.getY() - speed * 2);
-        } else {
-            location.setY(location.getY() + speed * 2);
-        }
-        lineLocation.setX((int)(location.getX() + 60 * Math.cos(radianHeading)));
-        lineLocation.setY((int)(location.getY() + 60 * Math.sin(radianHeading)));
-
-        //based on direction pointed it will determine where we steer
+        lineLocation.setX((int)((location.getX() + 25)
+                - 80 * Math.cos(radianHeading)));
+        lineLocation.setY((int)((location.getY() + 25)
+                - 80 * Math.sin(radianHeading)));
 
     }
 
@@ -535,11 +535,10 @@ class Helicopter {
             }
         }
 
-        radianHeading = Math.toRadians(heading);
-        System.out.println("Heading: " + heading);
-        System.out.println("Heading post radians: " + radianHeading);
-        System.out.println("Cos: " + Math.cos(radianHeading) * 15);
-        System.out.println("Sin: " + Math.sin(radianHeading) * 15);
+        //just like in easy clock the 24 represents 360/15
+        //meaning there are 24 possible places for the line to turn
+        //and the 15 is representative of which area was selected
+        radianHeading = Math.toRadians(360/24 * (heading /15) + 90);
     }
 
     public boolean collidesWithRiver(River river) {
